@@ -1,64 +1,76 @@
+/**
+ * OTPVerification.jsx
+ * Authentication Flow - OTP Verification Screen
+ * 
+ * Libraries used:
+ * - nativewind for Tailwind-style styling
+ * - react-native-vector-icons for icons
+ * 
+ * UI only, mock data, no backend or logic
+ */
+
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Button } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function OTPVerification({ navigation }) {
-  const [otp, setOtp] = useState('');
-  const [timer, setTimer] = useState(30);
-  const [resendDisabled, setResendDisabled] = useState(true);
+  const [otp, setOtp] = useState(['', '', '', '']);
+  const [timer, setTimer] = useState(60);
 
   useEffect(() => {
-    let interval = null;
-    if (timer > 0) {
-      interval = setInterval(() => {
-        setTimer((prev) => prev - 1);
-      }, 1000);
-    } else {
-      setResendDisabled(false);
-      clearInterval(interval);
-    }
+    if (timer === 0) return;
+    const interval = setInterval(() => {
+      setTimer(t => t - 1);
+    }, 1000);
     return () => clearInterval(interval);
   }, [timer]);
 
+  const handleChange = (text, index) => {
+    if (text.length > 1) return;
+    const newOtp = [...otp];
+    newOtp[index] = text;
+    setOtp(newOtp);
+    // Auto focus next input could be implemented here
+  };
+
   const handleResend = () => {
-    setTimer(30);
-    setResendDisabled(true);
-    setOtp('');
-    // Simulate resend OTP action
+    setTimer(60);
+    // Resend OTP logic placeholder
   };
 
   const handleVerify = () => {
-    if (otp.length < 4) {
-      alert('Please enter a 4-digit OTP.');
-      return;
-    }
-    // Navigate to Dashboard
+    // Verify OTP logic placeholder
     navigation.navigate('Dashboard');
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Enter OTP</Text>
-      <TextInput
-        style={styles.otpInput}
-        keyboardType="number-pad"
-        maxLength={6}
-        value={otp}
-        onChangeText={setOtp}
-        placeholder="Enter OTP"
-      />
-      <Text style={styles.timerText}>
-        {resendDisabled ? `Resend OTP in 00:${timer < 10 ? `0${timer}` : timer}` : ''}
-      </Text>
-      <TouchableOpacity
-        onPress={handleResend}
-        disabled={resendDisabled}
-        style={[styles.resendButton, resendDisabled && styles.resendButtonDisabled]}
-      >
-        <Text style={styles.resendButtonText}>Resend OTP</Text>
-      </TouchableOpacity>
-      <View style={styles.verifyButton}>
-        <Button title="Verify" onPress={handleVerify} />
+      <Text style={styles.subtitle}>We sent a 4-digit code to your phone</Text>
+      <View style={styles.otpContainer}>
+        {otp.map((digit, index) => (
+          <TextInput
+            key={index}
+            style={styles.otpInput}
+            keyboardType="number-pad"
+            maxLength={1}
+            value={digit}
+            onChangeText={text => handleChange(text, index)}
+          />
+        ))}
       </View>
+      <View style={styles.timerContainer}>
+        <Text style={styles.timerText}>Resend OTP in {timer}s</Text>
+        <TouchableOpacity onPress={handleResend} disabled={timer > 0}>
+          <Text style={[styles.resendText, timer > 0 && styles.resendDisabled]}>
+            Resend OTP
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity style={styles.verifyButton} onPress={handleVerify}>
+        <Text style={styles.verifyButtonText}>Verify</Text>
+        <Icon name="checkmark-circle" size={24} color="white" style={{ marginLeft: 8 }} />
+      </TouchableOpacity>
     </View>
   );
 }
@@ -67,49 +79,68 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 24,
-    justifyContent: 'center',
     backgroundColor: '#f8fafc',
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
-    marginBottom: 24,
-    textAlign: 'center',
     color: '#0f172a',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: '#64748b',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  otpContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginHorizontal: 40,
+    marginBottom: 24,
   },
   otpInput: {
-    height: 48,
-    borderColor: '#cbd5e1',
+    width: 50,
+    height: 50,
     borderWidth: 1,
+    borderColor: '#cbd5e1',
     borderRadius: 8,
-    paddingHorizontal: 12,
-    fontSize: 20,
-    letterSpacing: 12,
     textAlign: 'center',
-    backgroundColor: '#ffffff',
-    marginBottom: 16,
+    fontSize: 24,
+    color: '#0f172a',
+    backgroundColor: 'white',
   },
-  timerText: {
-    textAlign: 'center',
-    color: '#64748b',
-    marginBottom: 16,
-  },
-  resendButton: {
-    backgroundColor: '#0ea5e9',
-    paddingVertical: 12,
-    borderRadius: 8,
+  timerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 32,
   },
-  resendButtonDisabled: {
-    backgroundColor: '#94a3b8',
+  timerText: {
+    fontSize: 14,
+    color: '#64748b',
+    marginRight: 16,
   },
-  resendButtonText: {
-    color: '#ffffff',
-    textAlign: 'center',
-    fontWeight: '600',
-    fontSize: 16,
+  resendText: {
+    fontSize: 14,
+    color: '#0ea5e9',
+  },
+  resendDisabled: {
+    color: '#94a3b8',
   },
   verifyButton: {
-    marginTop: 8,
+    flexDirection: 'row',
+    backgroundColor: '#0ea5e9',
+    paddingVertical: 14,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  verifyButtonText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: '700',
   },
 });
