@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Switch, TouchableOpacity, StyleSheet, Button, KeyboardAvoidingView, Platform, Image } from 'react-native';
+import { View, Text, TextInput, Switch, TouchableOpacity, StyleSheet, Button, KeyboardAvoidingView, Platform } from 'react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState('');
@@ -20,11 +21,9 @@ export default function LoginScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <Image
-        source={require('../assets/logo-placeholder.svg')}
-        style={styles.logo}
-        resizeMode="contain"
-      />
+      <View style={styles.logoContainer}>
+        <Icon name="water" size={100} color="#0ea5e9" />
+      </View>
       <Text style={styles.title}>Smart Water Billing</Text>
       <TextInput
         style={styles.input}
@@ -64,10 +63,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#f8fafc',
   },
-  logo: {
-    width: 120,
-    height: 120,
-    alignSelf: 'center',
+  logoContainer: {
+    alignItems: 'center',
     marginBottom: 24,
   },
   title: {
