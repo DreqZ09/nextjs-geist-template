@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import UsageCard from '../components/UsageCard';
 import NotificationItem from '../components/NotificationItem';
 import { LineChart } from 'react-native-chart-kit';
@@ -59,6 +59,11 @@ export default function DashboardScreen({ navigation }) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
+        <Image
+          source={require('../assets/logo-placeholder.svg')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <Text style={styles.customerName}>John Doe</Text>
         <Text style={styles.accountId}>Account ID: 123456789</Text>
       </View>
@@ -101,6 +106,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderBottomColor: '#e2e8f0',
     borderBottomWidth: 1,
+    alignItems: 'center',
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    marginBottom: 8,
   },
   customerName: {
     fontSize: 24,
