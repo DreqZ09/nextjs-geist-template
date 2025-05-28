@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Switch, TouchableOpacity, StyleSheet, Button, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, TextInput, Switch, TouchableOpacity, StyleSheet, Button, KeyboardAvoidingView, Platform, Image } from 'react-native';
 
 export default function LoginScreen({ navigation }) {
   const [phone, setPhone] = useState('');
@@ -20,6 +20,11 @@ export default function LoginScreen({ navigation }) {
       style={styles.container}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
+      <Image
+        source={require('../assets/logo-placeholder.svg')}
+        style={styles.logo}
+        resizeMode="contain"
+      />
       <Text style={styles.title}>Smart Water Billing</Text>
       <TextInput
         style={styles.input}
@@ -46,7 +51,7 @@ export default function LoginScreen({ navigation }) {
         <Text style={styles.forgotPassword}>Forgot password?</Text>
       </TouchableOpacity>
       <View style={styles.loginButton}>
-        <Button title="Login" onPress={handleLogin} />
+        <Button title="Login" onPress={handleLogin} color="#0ea5e9" />
       </View>
     </KeyboardAvoidingView>
   );
@@ -58,6 +63,12 @@ const styles = StyleSheet.create({
     padding: 24,
     justifyContent: 'center',
     backgroundColor: '#f8fafc',
+  },
+  logo: {
+    width: 120,
+    height: 120,
+    alignSelf: 'center',
+    marginBottom: 24,
   },
   title: {
     fontSize: 28,
